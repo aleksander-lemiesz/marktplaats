@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+    id 'application' // for running the application
+}
+
+group 'sot.client'
+version '1.0-SNAPSHOT'
+
+
+repositories {
+    mavenCentral()
+}
+
+application{
+    mainClass.set("sot.client.Client") // set the main class from which the client will run
+}
+
+dependencies {
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+
+    /*  Jersey for the service
+   We use the latest 2.x release because 2.x releases implement JAX-RS 2.1 API.
+   We do NOT use a Jersey 3.x release because 3.x releases implement Jakarta RESTful WebServices 3.0 API.*/
+    implementation group: 'org.glassfish.jersey.bundles', name: 'jaxrs-ri', version: '2.33'
+    implementation group: 'org.glassfish.jersey.core', name: 'jersey-client', version: '2.33'
+
+
+    implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+}
+
+test {
+    useJUnitPlatform()
+}

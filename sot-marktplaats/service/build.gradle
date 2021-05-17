@@ -1,0 +1,57 @@
+plugins {
+    id 'java'        // for working with Java
+    id 'application' // for running the application
+}
+
+group 'sot.service'
+version '1.0-SNAPSHOT'
+
+
+repositories {
+    mavenCentral()
+}
+
+application{
+    mainClass.set("sot.service.Publisher") // set the main class from which the service will run
+}
+
+dependencies {
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+
+    /*  Jersey for the service
+       We use the latest 2.x release because 2.x releases implement JAX-RS 2.1 API.
+
+       We do NOT use a Jersey 3.x release because 3.x releases implement Jakarta RESTful WebServices 3.0 API.*/
+    implementation group: 'org.glassfish.jersey.bundles', name: 'jaxrs-ri', version: '2.33'
+    implementation group: 'org.glassfish.jersey.containers', name: 'jersey-container-servlet', version: '2.33'
+
+    // https://mvnrepository.com/artifact/org.glassfish.jersey.containers/jersey-container-jdk-http
+    //implementation group: 'org.glassfish.jersey.containers', name: 'jersey-container-jdk-http', version: '2.33'
+
+    // https://mvnrepository.com/artifact/org.glassfish.jersey.containers/jersey-container-servlet
+    implementation group: 'org.glassfish.jersey.containers', name: 'jersey-container-servlet', version: '2.33'
+
+    // https://mvnrepository.com/artifact/org.glassfish.jersey.containers/jersey-container-grizzly2-http
+    implementation group: 'org.glassfish.jersey.containers', name: 'jersey-container-grizzly2-http', version: '2.33'
+
+
+    implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jar {
+
+    manifest {
+        attributes 'Main-Class': 'fontys.sot.rest.service.Publisher'
+    }
+
+    archiveFileName = 'service.jar'
+
+    // add all dependencies to the executable .jar file
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+}
